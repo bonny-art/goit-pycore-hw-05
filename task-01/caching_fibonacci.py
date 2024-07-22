@@ -42,7 +42,7 @@ if __name__ == "__main__":
     test_cases = [10, 15, 20, 30]
     expected_results = [55, 610, 6765, 832040]
     
-    # Counters for passed and failed tests
+    # Run tests
     passed_tests = 0
     failed_tests = 0
     
@@ -50,14 +50,17 @@ if __name__ == "__main__":
         try:
             result = fib(test_case)
             expected = expected_results[i]
-            print(f"fib({test_case}) = {result}, expected: {expected}")
+
+            print(f"\nfib({test_case}) = {result}, expected: {expected}")
+
             assert result == expected, f"Test case failed for n={test_case}: got {result}, expected {expected}"
-            passed_tests += 1  # Increment passed tests counter if assertion passes
+
+            passed_tests += 1
         except AssertionError as e:
             print(e)
-            failed_tests += 1  # Increment failed tests counter if assertion fails
+            failed_tests += 1
     
     # Print summary of test results
     print("\nTesting completed.")
     print(f"Passed tests: {passed_tests}")
-    print(f"Failed tests: {failed_tests}")
+    print(f"Failed tests: {failed_tests}\n")
