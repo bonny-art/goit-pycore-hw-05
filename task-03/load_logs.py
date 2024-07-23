@@ -2,7 +2,9 @@
 Module for loading and parsing log files into dictionaries.
 """
 
+import sys
 from typing import List, Dict
+from pathlib import Path
 from parse_log_line import parse_log_line
 
 from test_data import loaded_logs as expected_logs
@@ -24,16 +26,28 @@ def load_logs(file_path: str) -> List[Dict[str, str]]:
 
     Raises:
         FileNotFoundError: If the file cannot be found.
-        ValueError: If the data format is invalid.
+        RuntimeError: If the file is empty.
+        ValueError: If a log line is invalid or cannot be parsed.
     """
+
+    if not Path(file_path).stat().st_size:
+        print(f"The file is empty: {file_path}")
+        sys.exit(1)
+
+    parsed_logs = []
 
     try:
         with open(file_path, 'r', encoding='utf-8') as file:
-            parsed_logs = [parse_log_line(line.strip()) for line in file]
+            for line in file:
+                line = line.strip()
+                if line:
+                    try:
+                        parsed_log = parse_log_line(line)
+                        parsed_logs.append(parsed_log)
+                    except ValueError as e:
+                        print(f"Skipping line due to error: {e}")
     except FileNotFoundError as exc:
         raise FileNotFoundError('File not found') from exc
-    except ValueError as exc:
-        raise ValueError('Invalid data format') from exc
 
     return parsed_logs
 

@@ -25,6 +25,10 @@ def parse_log_line(line: str) -> Dict[str, str]:
     """
 
     components = line.split(' ', 3)
+
+    if len(components) != 4:
+        raise ValueError(f"Line format invalid: {line}")
+
     return {
         "date": components[0],
         "time": components[1],
